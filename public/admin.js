@@ -1,4 +1,6 @@
-const BASE_URL = "http://localhost:3000";
+// const BASE_URL = "http://localhost:3000";
+const BASE_URL = "https://inscription-ecefa.onrender.com";
+
 let idEtudiantSelectionne = null;
 
 
