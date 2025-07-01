@@ -185,40 +185,45 @@ router.get('/stats/formations', async (req, res) => {
 
 
 
-const puppeteer = require('puppeteer');
-const generateFicheHTML = require('../utils/templateFiche');
+
 
 router.get('/fiche/:id', async (req, res) => {
   try {
     const etudiant = await Etudiant.findById(req.params.id);
     if (!etudiant) return res.status(404).send("Étudiant non trouvé");
 
-    const html = generateFicheHTML(etudiant);
-
-    const browser = await puppeteer.launch({
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"]
-    });
-
-    const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
-
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true
-    });
-
-    await browser.close();
+    const doc = new PDFDocument({ margin: 50 });
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'inline; filename=fiche_etudiant.pdf');
-    res.send(pdfBuffer);
+    doc.pipe(res);
 
+    // Header
+    doc.fontSize(20).fillColor('#3498db').text("Fiche d'inscription", { align: 'center' });
+    doc.moveDown();
+
+    // Contenu
+    doc.fontSize(12).fillColor('#000');
+    doc.text(`Nom et Prénom : ${etudiant.nom_prenom}`);
+    doc.text(`Date de naissance : ${etudiant.date_naissance || '—'}`);
+    doc.text(`Formation : ${etudiant.formation || '—'}`);
+    doc.text(`Date de formation : ${etudiant.date_formation || '—'}`);
+    doc.text(`Activité : ${etudiant.activite || '—'}`);
+    doc.text(`Téléphone : ${etudiant.telephone}`);
+    doc.text(`WhatsApp : ${etudiant.whatsapp || '—'}`);
+    doc.text(`Statut : ${etudiant.statut || 'En attente'}`);
+    doc.text(`Date d'inscription : ${new Date(etudiant.createdAt).toLocaleDateString()}`);
+
+    doc.moveDown(2);
+    doc.fontSize(10).fillColor('#888').text('Document généré automatiquement. Merci de vérifier les informations.', { align: 'center' });
+
+    doc.end();
   } catch (err) {
-    console.error("Erreur génération PDF :", err);
+    console.error("Erreur PDF :", err);
     res.status(500).send("Erreur serveur lors de la génération du PDF.");
   }
 });
+
 
 
 
