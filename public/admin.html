@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Bord - Inscriptions ECEFA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="./admin.css">
+</head>
+<body>
+    <!-- Animation de fond -->
+    <div class="bg-animation" id="bgAnimation"></div>
+    
+    <!-- Éléments flottants 3D -->
+    <div class="floating-element shape-1"></div>
+    <div class="floating-element shape-2"></div>
+    
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo-container">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="logo-text">ECEFA</div>
+            </div>
+            
+            <div class="nav-title">Navigation</div>
+            <div class="nav-item active">
+                <i class="fas fa-home"></i>
+                <div class="nav-text">Tableau de bord</div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-users"></i>
+                <div class="nav-text"><a href="#table-inscription">Inscriptions</a></div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-chart-line"></i>
+                <div class="nav-text"><a href="#charts-container">Statistiques</a></div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-cog"></i>
+                <div class="nav-text">Paramètres</div>
+            </div>
+            
+            <!-- <div class="nav-title">Formations</div>
+            <div class="nav-item">
+                <i class="fas fa-laptop-code"></i>
+                <div class="nav-text">Informatique</div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-chart-bar"></i>
+                <div class="nav-text">Gestion</div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-bullhorn"></i>
+                <div class="nav-text">Marketing</div>
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-paint-brush"></i>
+                <div class="nav-text">Design</div>
+            </div> -->
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <div class="page-title">
+                    <h1>Tableau de Bord <span style="font-size: 18px; color: var(--gray); font-weight: 400">/ Gestion des inscriptions</span></h1>
+                </div>
+                
+                <div class="user-controls">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Rechercher une inscription...">
+                    </div>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">AD</div>
+                        <div class="user-name">Admin ECEFA</div>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+               <div class="dropdown-menu" id="adminDropdown" style="display: none;">
+  <button id="logoutBtn">
+    <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i> Se déconnecter
+  </button>
+</div>
+
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-icon icon-1">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="stat-total">248</div>
+                        <div class="stat-title">Inscriptions totales</div>
+                        <div class="stat-change change-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="var-total">12% ce mois</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon icon-2">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="stat-confirmees">184</div>
+                        <div class="stat-title">Confirmées</div>
+                        <div class="stat-change change-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="var-confirmees">8% ce mois</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon icon-3">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="stat-attente">42</div>
+                        <div class="stat-title">En attente</div>
+                        <div class="stat-change change-down">
+                            <i class="fas fa-arrow-down"></i>
+                            <span id="var-attente">3% ce mois</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-icon icon-4">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-value" id="taux-confirmation">74%</div>
+                        <div class="stat-title">Taux de confirmation</div>
+                        <div class="stat-change change-up">
+                            <i class="fas fa-arrow-up"></i>
+                            <span id="var-confirmation">2% ce mois</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div id="charts-container" class="charts-container">
+                <div class="chart-card">
+                    <div class="card-header">
+                        <div class="card-title">Inscriptions par formation</div>
+                        <div class="card-actions">
+                            <button><i class="fas fa-sync-alt"></i></button>
+                            <button><i class="fas fa-expand-alt"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="formationsChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <div class="card-header">
+                        <div class="card-title">Statut des inscriptions</div>
+                        <div class="card-actions">
+                            <button><i class="fas fa-sync-alt"></i></button>
+                            <button><i class="fas fa-expand-alt"></i></button>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Data Table -->
+            <div id="table-inscription" class="data-table-container">
+                <div class="card-header">
+                    <div class="card-title">Dernières inscriptions</div>
+                    <div class="card-actions">
+                        <button id="btnDownloadPDF" disabled title="Double-clique sur une ligne pour la sélectionner"><i class="fas fa-download"></i></button>
+                        <button><i class="fas fa-filter"></i></button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom & Prénom</th>
+                                <th>Formation</th>
+                                <th>Date d'inscription</th>
+                                <th>Téléphone</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inscriptionsBody">
+                            <tr>
+                                <td>Martin Dubois</td>
+                                <td>Marketing Digital</td>
+                                <td>15/06/2023</td>
+                                <td>+33 6 12 34 56 78</td>
+                                <td><span class="status confirmed">Confirmée</span></td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sophie Laurent</td>
+                                <td>Design Graphique</td>
+                                <td>14/06/2023</td>
+                                <td>+33 6 87 65 43 21</td>
+                                <td><span class="status pending">En attente</span></td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Thomas Moreau</td>
+                                <td>Informatique & Réseaux</td>
+                                <td>12/06/2023</td>
+                                <td>+33 6 98 76 54 32</td>
+                                <td><span class="status confirmed">Confirmée</span></td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Camille Petit</td>
+                                <td>Finance & Comptabilité</td>
+                                <td>10/06/2023</td>
+                                <td>+33 6 23 45 67 89</td>
+                                <td><span class="status confirmed">Confirmée</span></td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lucas Bernard</td>
+                                <td>Gestion d'Entreprise</td>
+                                <td>08/06/2023</td>
+                                <td>+33 6 54 32 10 98</td>
+                                <td><span class="status pending">En attente</span></td>
+                                <td class="actions">
+                                    <button class="action-btn view"><i class="fas fa-eye"></i></button>
+                                    <button class="action-btn edit"><i class="fas fa-edit"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+<!-- Modale d'édition -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <span id="closeEditModal" class="close" title="Fermer">
+      <i class="fas fa-times"></i>
+    </span>
+    <h3><i class="fas fa-user-edit"></i> Modifier l'étudiant</h3>
+    <form id="editForm">
+      <label>
+        <i class="fas fa-user"></i> Nom & Prénom :
+        <input name="nom_prenom" required />
+      </label>
+      <label>
+        <i class="fas fa-graduation-cap"></i> Formation :
+        <input name="formation" />
+      </label>
+      <label>
+        <i class="fas fa-calendar-alt"></i> Date d'inscription :
+        <input type="date" name="createdAt" />
+      </label>
+      <button type="submit">
+        <i class="fas fa-save"></i> Enregistrer
+      </button>
+    </form>
+  </div>
+</div>
+
+
+
+
+
+
+
+    <script src="./admin.js"></script>
+</body>
+</html>
